@@ -1,0 +1,83 @@
+#+Title: Guix Operating System Configuration
+#+Author: Peng Mei Yu
+#+Copyright: 2018-2020 Peng Mei Yu
+#+License: GPLv3
+
+- Boot from UEFI
+- The root partition is encrypted with LUKS
+
+
+* Install System
+  This configuration contains linux-nonfree kernel.
+
+  #+BEGIN_QUOTE
+    Forgive me Stallman for I have sinned.
+  #+END_QUOTE
+
+** Partition Disk
+   #+begin_src sh
+     cfdisk /dev/sda
+   #+end_src
+
+   #+NAME: partition-table
+   | /dev/sda1 | /boot/efi | FAT   | 63MB |
+   | /dev/sda2 | /         | Btrfs | 20GB |
+
+   #+begin_src sh
+     mkfs.fat /dev/sda1
+     cryptsetup luksFormat /dev/sda2
+     cryptsetup open /dev/sda2 root
+     mkfs.btrfs -L root /dev/mapper/root
+     mount /dev/mapper/root /mnt
+     mkdir -p /mnt/boot/efi
+     mount /dev/sda1 /mnt/boot/efi
+   #+end_src
+
+** Create swap file on Btrfs
+   #+begin_src sh
+     mkdir /mnt/var
+     truncate -s 0 /mnt/var/swapfile
+     chattr +C /mnt/var/swapfile
+     fallocate -l 8G /mnt/var/swapfile
+     chmod 600 /mnt/var/swapfile
+     mkswap /mnt/var/swapfile
+   #+end_src
+
+** Setup network
+   #+begin_src sh
+     ip link set eth0 up
+     dhclient eth0
+     herd start ssh-daemon
+   #+end_src
+
+** Copy configuration file
+   #+begin_src sh
+     cp -r guix-config /mnt/etc
+   #+end_src
+
+** Install a minimal Guix system
+   #+begin_src sh
+     herd start cow-store /mnt
+     guix system init /mnt/etc/guix-config/meiyu/systems/minimal.scm /mnt
+   #+end_src
+
+** Reboot
+   Reboot and log in to the new minimal Guix system.
+
+** Update guix
+   #+begin_src sh
+     guix pull
+   #+end_src
+
+** Reconfigure to a full Guix system
+   Reconfigure the minimal system to a full Guix system.
+   #+begin_src sh
+     export GUILE_LOAD_PATH=/etc/guix-config:$GUILE_LOAD_PATH
+     guix system reconfigure /etc/guix-config/meiyu/systems/captain.scm
+   #+end_src
+
+* Install Packages
+  #+begin_src sh
+    export GUILE_LOAD_PATH=/etc/guix-config:$GUILE_LOAD_PATH
+    guix package -m captain-packages.scm
+  #+end_src

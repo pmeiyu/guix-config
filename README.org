@@ -1,13 +1,11 @@
 #+Title: Guix Operating System Configuration
 #+Author: Peng Mei Yu
-#+Copyright: 2018-2020 Peng Mei Yu
+#+Copyright: Copyright 2018-2020 Peng Mei Yu
 #+License: GPLv3
 
-- Boot from UEFI
-- The root partition is encrypted with LUKS
 
+* Install Guix system
 
-* Install System
   This configuration contains linux-nonfree kernel.
 
   #+BEGIN_QUOTE
@@ -15,13 +13,15 @@
   #+END_QUOTE
 
 ** Partition Disk
+
    #+begin_src sh
      cfdisk /dev/sda
    #+end_src
 
+   The root partition is encrypted with LUKS.
    #+NAME: partition-table
-   | /dev/sda1 | /boot/efi | FAT   | 63MB |
-   | /dev/sda2 | /         | Btrfs | 20GB |
+   | /dev/sda1 | /boot/efi | FAT        | 63MB |
+   | /dev/sda2 | /         | BTRFS+LUKS | 20GB |
 
    #+begin_src sh
      mkfs.fat /dev/sda1
@@ -34,6 +34,7 @@
    #+end_src
 
 ** Create swap file on Btrfs
+
    #+begin_src sh
      mkdir /mnt/var
      truncate -s 0 /mnt/var/swapfile
@@ -44,6 +45,7 @@
    #+end_src
 
 ** Setup network
+
    #+begin_src sh
      ip link set eth0 up
      dhclient eth0
@@ -51,33 +53,66 @@
    #+end_src
 
 ** Copy configuration file
+
    #+begin_src sh
      cp -r guix-config /mnt/etc
    #+end_src
 
 ** Install a minimal Guix system
+
    #+begin_src sh
      herd start cow-store /mnt
      guix system init /mnt/etc/guix-config/meiyu/systems/minimal.scm /mnt
    #+end_src
 
 ** Reboot
-   Reboot and log in to the new minimal Guix system.
+
+   Reboot into the Guix system.
 
 ** Update guix
+
    #+begin_src sh
      guix pull
    #+end_src
 
 ** Reconfigure to a full Guix system
+
    Reconfigure the minimal system to a full Guix system.
    #+begin_src sh
      export GUILE_LOAD_PATH=/etc/guix-config:$GUILE_LOAD_PATH
      guix system reconfigure /etc/guix-config/meiyu/systems/captain.scm
    #+end_src
 
+* Replace an existing operation system with Guix system
+
+  Do this with =root= user account because ~sudo~ does not work after
+  replacing ~/etc~.
+
+  Build the Guix system.
+  #+begin_src sh
+    guix system build config.scm
+  #+end_src
+
+  Clean up ~/etc~.
+  #+begin_src sh
+    mv /etc /old-etc
+    mkdir /etc
+    cp /old-etc/{passwd,group,shadow,mtab} /etc
+  #+end_src
+
+  Install the Guix system.
+  #+begin_src sh
+    guix system reconfigure config.scm
+  #+end_src
+
+  Reboot into the Guix system.
+  #+begin_src sh
+    reboot
+  #+end_src
+
 * Install Packages
+
   #+begin_src sh
     export GUILE_LOAD_PATH=/etc/guix-config:$GUILE_LOAD_PATH
-    guix package -m captain-packages.scm
+    guix package -m /etc/guix-config/meiyu/packages/captain-packages.scm
   #+end_src

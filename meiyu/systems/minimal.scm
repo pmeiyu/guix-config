@@ -4,8 +4,11 @@
 (use-service-modules networking ssh)
 
 
-(define %my-ssh-public-key
-  "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILSWDNLrevEMD83aVXEAoCirJxWxI1Ft5AlK15KipL+x none")
+(define %ssh-public-key
+  "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILSWDNLrevEMD83aVXEAoCirJxWxI1Ft5AlK15KipL+x")
+
+(define %substitute-urls
+  '("https://mirror.guix.org.cn"))
 
 (operating-system
   (host-name "guix")
@@ -48,11 +51,15 @@
                          '("curl" "nss-certs" "openssh" "rsync" "tmux"))
                     %base-packages))
 
-  (services (cons* (service openssh-service-type
+  (services (cons* (service dhcp-client-service-type)
+                   (service openssh-service-type
                             (openssh-configuration
                              (permit-root-login 'without-password)
                              (authorized-keys
                               `(("root" ,(plain-file "authorized_keys"
-                                                     %my-ssh-public-key))))))
-                   (service dhcp-client-service-type)
-                   %base-services)))
+                                                     %ssh-public-key))))))
+                   (modify-services %base-services
+                     (guix-service-type
+                      config => (guix-configuration
+                                 (inherit config)
+                                 (substitute-urls %substitute-urls)))))))

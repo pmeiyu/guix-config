@@ -13,8 +13,8 @@
 
 
 (define %my-substitute-urls
-  '("https://guix-mirror.pengmeiyu.com"
-    "https://builder.pengmeiyu.com/guix"))
+  '("https://mirror.guix.org.cn"
+    "https://ci.guix.org.cn"))
 
 (define %resolv.conf
   (plain-file "resolv.conf"

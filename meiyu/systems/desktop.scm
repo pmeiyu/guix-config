@@ -16,6 +16,10 @@
   '("https://guix-mirror.pengmeiyu.com"
     "https://builder.pengmeiyu.com/guix"))
 
+(define %resolv.conf
+  (plain-file "resolv.conf"
+              "nameserver ::1"))
+
 (define-public %my-extra-desktop-packages
   (map (compose list specification->package+output)
        '("alsa-utils" "pulseaudio"
@@ -51,6 +55,8 @@
 (define-public %my-extra-desktop-services
   (list
    (service dnscrypt-proxy-service-type)
+   (simple-service 'resolv.conf etc-service-type
+                   (list `("resolv.conf" ,%resolv.conf)))
    (service guix-publish-service-type
             (guix-publish-configuration (port 8181)))
    (service nginx-service-type

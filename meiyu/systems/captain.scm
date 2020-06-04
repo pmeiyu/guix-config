@@ -7,12 +7,17 @@
   #:use-module (meiyu services vpn)
   #:use-module (meiyu systems desktop))
 
-(use-service-modules desktop security-token)
+(use-package-modules package-management)
+(use-service-modules desktop nix security-token)
 
+(define %packages
+  (cons* nix
+         %my-desktop-packages))
 
-(define %my-services
+(define %services
   (cons*
    (bluetooth-service)
+   (service nix-service-type)
    (service pcscd-service-type)
    (service tinc-service-type
             (tinc-configuration (net-name "galaxy")))
@@ -47,4 +52,6 @@
 
   ;; (swap-devices '("/var/swapfile"))
 
-  (services %my-services))
+  (packages %packages)
+
+  (services %services))

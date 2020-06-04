@@ -60,15 +60,7 @@
               `(("root" ,(plain-file "authorized_keys"
                                      %my-ssh-public-keys))
                 ("meiyu" ,(plain-file "authorized_keys"
-                                      %my-ssh-public-keys))))
-             (extra-content "Match User ftp
-ChrootDirectory %h
-ForceCommand internal-sftp
-PasswordAuthentication yes
-AllowTcpForwarding no
-PermitTunnel no
-PermitTTY no
-X11Forwarding no")))
+                                      %my-ssh-public-keys))))))
    (service sysctl-service-type
             (sysctl-configuration
              (settings '(("fs.inotify.max_user_watches" . "100000")
@@ -127,13 +119,6 @@ X11Forwarding no")))
                    (supplementary-groups '("audio" "input" "kvm" "lp"
                                            "netdev" "video" "wheel"))
                    (shell (file-append zsh "/bin/zsh")))
-                  (user-account
-                   (name "ftp")
-                   (comment "file sharing")
-                   (group "users")
-                   (home-directory "/srv/ftp")
-                   (shell "/run/current-system/profile/sbin/nologin")
-                   (system? #t))
                   %base-user-accounts))
 
     ;; System-wide packages.

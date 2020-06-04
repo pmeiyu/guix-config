@@ -39,8 +39,7 @@
     (guix-service-type
      config => (guix-configuration
                 (inherit config)
-                (substitute-urls %my-substitute-urls)
-                (extra-options '("--max-jobs=2"))))))
+                (substitute-urls %my-substitute-urls)))))
 
 (define-public %my-extra-basic-services
   (list

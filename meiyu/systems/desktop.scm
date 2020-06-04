@@ -45,7 +45,8 @@
      (guix-service-type
       config => (guix-configuration
                  (inherit config)
-                 (substitute-urls %my-substitute-urls)))
+                 (substitute-urls %my-substitute-urls)
+                 (extra-options '("--max-jobs=4"))))
      ;; Prevent network-manager from modifying /etc/resolv.conf.
      (network-manager-service-type
       config => (network-manager-configuration

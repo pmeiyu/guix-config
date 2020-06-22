@@ -27,8 +27,9 @@
         '("btrfs-progs" "cryptsetup" "dosfstools" "ntfs-3g" "nftables"
 
           "bind:utils" "curl" "dbus" "emacs" "gash" "git" "gnupg"
-          "guile-readline" "mcron" "nss-certs" "openssh" "pinentry" "python"
-          "rsync" "stow" "tmux" "wget" "xdg-user-dirs" "xdg-utils" "zsh"))))
+          "guile-readline" "mcron" "ncurses" "nss-certs" "openssh" "pinentry"
+          "python" "rsync" "stow" "tmux" "wget" "xdg-user-dirs" "xdg-utils"
+          "zsh"))))
 
 (define-public %my-basic-packages
   (append %base-packages

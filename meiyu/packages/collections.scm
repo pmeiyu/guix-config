@@ -10,13 +10,14 @@
 
 (define-public archive-packages
   (map (compose list specification->package+output)
-       '("duplicity"
+       '("ddrescue"
          "lzip"
          "lziprecover"
          "p7zip"
          "par2cmdline"
-         "plzip"
          "tar"
+         "unzip"
+         "zip"
          "zstd"
          "zutils")))
 
@@ -46,13 +47,13 @@
 
 (define-public crypto-packages
   (map (compose list specification->package+output)
-       '("encfs"
+       '("cryptsetup"
+         "encfs"
          "openssl")))
 
 (define-public desktop-packages
   (map (compose list specification->package+output)
        '("anki"
-         "icecat"
          "keepassxc"
          "next")))
 
@@ -61,6 +62,7 @@
        '("gettext"
          "git"
          "git:send-email"
+         "make"
          "perl"
          "sharutils"
          "strace")))
@@ -70,7 +72,8 @@
        '("aspell"
          "aspell-dict-en"
          "emacs"
-         "emacs-pdf-tools")))
+         "emacs-pdf-tools"
+         "emacs-rime")))
 
 (define-public email-packages
   (map (compose list specification->package+output)
@@ -93,12 +96,6 @@
        '("electrum"
          "gnucash"
          "ledger")))
-
-(define-public firefox-bin-dependencies
-  (map (compose list specification->package+output)
-       '("gcc:lib"
-         "libxcomposite"
-         "libxt")))
 
 (define-public go-packages
   (map (compose list specification->package+output)
@@ -137,21 +134,28 @@
          "mtr"
          "ngrep"
          "nmap"
-         "openvpn"
          "socat"
          "tcpdump")))
 
 (define-public office-packages
   (map (compose list specification->package+output)
-       '("libreoffice")))
+       '("libreoffice"
+         "obs")))
 
 (define-public python-packages
   (map (compose list specification->package+output)
        '("ptpython"
          "python"
+         "python-ipython"
          "python-language-server"
+         "python-matplotlib"
+         "python-numpy"
+         "python-pandas"
+         "python-peewee"
+         "python-pillow"
          "python-pytz"
-         "python-requests")))
+         "python-requests"
+         "python-virtualenv")))
 
 (define-public virtual-machine-packages
   (map (compose list specification->package+output)

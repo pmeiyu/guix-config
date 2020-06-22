@@ -17,6 +17,7 @@
 (define %services
   (cons*
    (bluetooth-service)
+   (service gnome-desktop-service-type)
    (service nix-service-type)
    (service pcscd-service-type)
    (service tinc-service-type

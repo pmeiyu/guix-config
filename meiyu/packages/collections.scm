@@ -55,7 +55,7 @@
   (map (compose list specification->package+output)
        '("anki"
          "keepassxc"
-         "next")))
+         "nyxt")))
 
 (define-public development-packages
   (map (compose list specification->package+output)

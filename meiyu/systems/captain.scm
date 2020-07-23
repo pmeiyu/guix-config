@@ -8,7 +8,7 @@
   #:use-module (meiyu systems desktop))
 
 (use-package-modules package-management)
-(use-service-modules desktop nix security-token)
+(use-service-modules desktop nix security-token virtualization)
 
 (define %packages
   (cons* nix
@@ -18,6 +18,7 @@
   (cons*
    (bluetooth-service)
    (service gnome-desktop-service-type)
+   (service libvirt-service-type)
    (service nix-service-type)
    (service pcscd-service-type)
    (service tinc-service-type

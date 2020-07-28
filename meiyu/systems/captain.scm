@@ -11,15 +11,17 @@
 (use-service-modules desktop nix security-token virtualization)
 
 (define %packages
-  (cons* nix
-         %my-desktop-packages))
+  %my-desktop-packages)
 
 (define %services
   (cons*
    (bluetooth-service)
    (service gnome-desktop-service-type)
    (service libvirt-service-type)
-   (service nix-service-type)
+   (service nix-service-type
+            (nix-configuration
+             (extra-config
+              '("substituters = https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store/ https://cache.nixos.org/"))))
    (service pcscd-service-type)
    (service tinc-service-type
             (tinc-configuration (net-name "galaxy")))

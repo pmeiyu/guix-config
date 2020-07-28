@@ -28,7 +28,7 @@
          "ibus" "ibus-rime" "librime" "dconf"
          "sway" "swayidle" "waybar" "rofi" "mako" "libnotify"
          "wl-clipboard" "grim" "slurp" "imv"
-         "fish" "termite")))
+         "alacritty" "fish")))
 
 (define-public %my-desktop-packages
   (append %my-basic-packages

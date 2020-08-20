@@ -83,7 +83,7 @@
      guix system reconfigure /etc/guix-config/meiyu/systems/captain.scm
    #+end_src
 
-* Replace an existing operation system with Guix system
+* Replace an existing operating system with Guix system
 
   Do this with =root= user account because ~sudo~ does not work after
   replacing ~/etc~.

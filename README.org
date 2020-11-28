@@ -97,7 +97,7 @@
   #+begin_src sh
     mv /etc /old-etc
     mkdir /etc
-    cp /old-etc/{passwd,group,shadow,mtab} /etc
+    cp -r /old-etc/{guix,passwd,group,shadow,mtab,services} /etc
   #+end_src
 
   Install the Guix system.
